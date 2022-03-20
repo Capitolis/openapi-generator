@@ -57,6 +57,10 @@ if [[ -n "$1" ]]; then
             ;;
         major|minor|build|snapshot)
             inc="$1"
+            flags="-i $1"
+            ;;
+        -t)
+            flags="-t $2"
             ;;
         *)
             echo "Invalid target.Must be one of: major minor build or snapshot" >&2
@@ -67,7 +71,9 @@ else
     inc="snapshot"
 fi
 
-echo "Release preparation: Moving from $version to next $inc version."
+if [[ -n "$inc" ]]; then
+  echo "Release preparation: Moving from $version to next $inc version."
+fi
 
 # These files should wrap target version replacement blocks with <!-- RELEASE_VERSION --> and <!-- /RELEASE_VERSION -->
 # We can include xml and md files here.
@@ -95,5 +101,5 @@ declare -a properties_files=(
     "${root}/modules/openapi-generator-gradle-plugin/samples/local-spec/gradle.properties"
 )
 
-${cwd}/bump.sh -f ${version} -i ${inc} ${xml_files[@]}
-${cwd}/bump.sh -f ${version} -t ${inc} -s '# RELEASE_VERSION' -e '# \/RELEASE_VERSION' ${properties_files[@]}
+${cwd}/bump.sh -f ${version} $flags ${xml_files[@]}
+${cwd}/bump.sh -f ${version} $flags -s '# RELEASE_VERSION' -e '# \/RELEASE_VERSION' ${properties_files[@]}
