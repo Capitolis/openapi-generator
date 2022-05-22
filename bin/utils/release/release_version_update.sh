@@ -58,6 +58,9 @@ if [[ -n "$1" ]]; then
         major|minor|build|snapshot)
             inc="$1"
             ;;
+        *[0-9].*[0-9]*)
+            toVer="$1"
+            ;;
         *)
             echo "Invalid target.Must be one of: major minor build or snapshot" >&2
             exit 1
@@ -95,5 +98,10 @@ declare -a properties_files=(
     "${root}/modules/openapi-generator-gradle-plugin/samples/local-spec/gradle.properties"
 )
 
-${cwd}/bump.sh -f ${version} -i ${inc} ${xml_files[@]}
-${cwd}/bump.sh -f ${version} -t ${inc} -s '# RELEASE_VERSION' -e '# \/RELEASE_VERSION' ${properties_files[@]}
+if [ -z "$toVer" ];
+  ${cwd}/bump.sh -f ${version} -i ${inc} ${xml_files[@]}
+  ${cwd}/bump.sh -f ${version} -t ${inc} -s '# RELEASE_VERSION' -e '# \/RELEASE_VERSION' ${properties_files[@]}
+else
+  ${cwd}/bump.sh -f ${version} -t ${toVer} ${xml_files[@]}
+  ${cwd}/bump.sh -f ${version} -t ${toVer} -s '# RELEASE_VERSION' -e '# \/RELEASE_VERSION' ${properties_files[@]}
+fi
