@@ -98,7 +98,7 @@ declare -a properties_files=(
     "${root}/modules/openapi-generator-gradle-plugin/samples/local-spec/gradle.properties"
 )
 
-if [ -z "$toVer" ];
+if [ -z "$toVer" ]; then
   ${cwd}/bump.sh -f ${version} -i ${inc} ${xml_files[@]}
   ${cwd}/bump.sh -f ${version} -t ${inc} -s '# RELEASE_VERSION' -e '# \/RELEASE_VERSION' ${properties_files[@]}
 else
