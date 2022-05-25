@@ -1175,3 +1175,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 ---
+
+
+### Capitolis build:
+
+
+```bash
+./bin/utils/release/release_version_update.sh [ver, e.g. 6.0.0-SNAP-CAPITOLIS-ENUM-FIX]
+./mvnw clean package
+./mvnw deploy -DaltDeploymentRepository=nexus::default::https://nexus.capitolis.com/repository/maven-releases
+```
